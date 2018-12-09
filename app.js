@@ -7,6 +7,8 @@ const createError = require('http-errors'),
 	usersRouter = require('./app_server/routes/users'),
 	app = express();
 
+require('./app_server/models/db');
+
 // view engine setup
 app.set('views', path.join(__dirname, 'app_server', 'views'));
 app.set('view engine', 'pug');
