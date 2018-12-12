@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const dbURI = 'mongodb://localhost/Loc8r';
+const dbURI = process.env.MONGODB_URI;
 const gracefulShutdown = (msg, callback) => {
 	mongoose.connection.close(() => {
 		console.log(`Mongoose disconnected through ${msg}`);
