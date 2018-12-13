@@ -4,7 +4,7 @@ const createError = require('http-errors'),
 	cookieParser = require('cookie-parser'),
 	logger = require('morgan'),
 	indexRouter = require('./app_server/routes/index'),
-	usersRouter = require('./app_server/routes/users'),
+	apiRouter = require('./app_api/routes/index'),
 	app = express();
 
 require('./app_server/models/db');
@@ -20,7 +20,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
