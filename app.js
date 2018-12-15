@@ -1,3 +1,5 @@
+require('./app_api/models/db');
+
 const createError = require('http-errors'),
 	express = require('express'),
 	path = require('path'),
@@ -6,8 +8,6 @@ const createError = require('http-errors'),
 	indexRouter = require('./app_server/routes/index'),
 	apiRouter = require('./app_api/routes/index'),
 	app = express();
-
-require('./app_server/models/db');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'app_server', 'views'));

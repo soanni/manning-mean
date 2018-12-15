@@ -9,7 +9,7 @@ router
   .get(ctrlLocations.locationsListByDistance)
   .post(ctrlLocations.locationsCreate);
 
-router.
+router
   .route('/locations/:locationid')
   .get(ctrlLocations.locationsReadOne)
   .put(ctrlLocations.locationsUpdateOne)
@@ -24,6 +24,6 @@ router
   .route('/locations/:locationid/reviews/:reviewid')
   .get(ctrlReviews.reviewsReadOne)
   .put(ctrlReviews.reviewsUpdateOne)
-  .delete(ctrlReviews.reviewsDeeleteOne);
+  .delete(ctrlReviews.reviewsDeleteOne);
 
 module.exports = router;
