@@ -51,6 +51,23 @@ const renderDetailPage = (req, res, location) => {
 	});
 };
 
+const showError = (req, res, status) => {
+	let title = '';
+	let content = '';
+	if (status === 404) {
+		title = '404, page not found';
+		content = 'Oh dear. Looks like we can\'t find this page. Sorry.';
+	} else {
+		title = `${status}, something's gone wrong`;
+		content = 'Something, somewhere, has gone just a little bit wrong.';
+	}
+	res.status(status);
+	res.render('generic-text', {
+		title,
+		content
+	});
+};
+
 const getLocationInfo = (req, res, callback) => {
 	const path = `/api/locations/${req.params.locationid}`;
 	const requestOptions = {
@@ -67,7 +84,7 @@ const getLocationInfo = (req, res, callback) => {
 			};
 			callback(req, res, data);		
 		} else {
-			// placeholder
+			showError(req, res, statusCode);
 		}
 	});	
 };		
@@ -107,7 +124,8 @@ const locationInfo = (req, res) => {
 const renderReviewForm = (req, res, {name}) => {
 	res.render('location-review-form', {
 		title: `Review ${name} on Loc8r`,
-		pageHeader: { title: `Review ${name}` }
+		pageHeader: { title: `Review ${name}` },
+		error: req.query.err
 	});
 };
 
@@ -129,13 +147,20 @@ const doAddReview = (req, res) => {
 		method: 'POST',
 		json: postdata
 	};
-	request(requestOptions, (err, {statusCode}, body) => {
-		if (statusCode === 201) {
-			res.redirect(`/location/${locationid}`);
-		} else {
-			// placeholder
-		}
-	});
+	if (!postdata.author || !postdata.rating || !postdata.reviewText) {
+		res.redirect(`/location/${locationid}/review/new?err=val`);
+	} else {
+		request(requestOptions, (err, {statusCode},{name}) => {
+			if (statusCode === 201) {
+				res.redirect(`/location/${locationid}`);
+			} else if (statusCode === 400 && name && name === 'ValidationError'){
+				res.redirect(`/location/${locationid}/review/new?err=val`);
+			} 
+			else {
+				showError(req, res, statusCode);
+			}
+		});		
+	}
 };
 
 module.exports = {
