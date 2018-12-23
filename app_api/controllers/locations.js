@@ -45,7 +45,7 @@ const locationsListByDistance = async (req, res) => {
 	const geoOptions = {
 		distanceField: "distance.calculated",
 		spherical: true,
-		maxDistance: 20000,
+		//maxDistance: 20000,
 		limit: 10
 	};
 	if (!lng || !lat) {
