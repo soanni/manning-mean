@@ -1,5 +1,6 @@
 <div class="row">
 	<div class="col-12 col-md-6">
+	<app-rating-stars [thisRating]="location.rating"></app-rating-stars>
         <p>{{ location.address }}</p>
 		<div class="card card-primary">
 			<div class="card-block">
@@ -34,7 +35,7 @@
 				<h2 class="card-title">Customer reviews</h2>
 				<div *ngFor="let review of location.reviews" class="row review">
 					<div class="col-12 no-gutters review-header">
-						<!--<app-rating-stars [thisRating]="review.rating"></app-rating-stars>-->
+						<app-rating-stars [thisRating]="review.rating"></app-rating-stars>
 						<span class="reviewAuthor">{{ review.author }}</span>
 						<small class="reviewTimestamp">{{ review.createdOn }}</small>
 					</div>
