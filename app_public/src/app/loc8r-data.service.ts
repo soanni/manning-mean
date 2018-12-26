@@ -13,6 +13,16 @@ export class Loc8rDataService {
 
 	private apiBaseUrl = 'http://localhost:3000/api';
 
+	public addReviewByLocationId(locationId: string, formData: any): Promise<any> {
+
+		const url: string = `${this.apiBaseUrl}/locations/${locationId}/reviews`;
+		return this.http
+			.post(url, formData)
+			.toPromise()
+			.then(response => response as any)
+			.catch(this.handleError);
+	}
+
 	public getLocations(lat: number, lng: number): Promise<Location[]> {
 		//const lng: number = -0.9580780;
 		//const lat: number = 51.444130;

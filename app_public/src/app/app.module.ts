@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { HomeListComponent } from './home-list/home-list.component';
 import { DistancePipe } from './distance.pipe';
@@ -14,6 +15,7 @@ import { HtmlLineBreaksPipe } from './html-line-breaks.pipe';
 import { LocationDetailsComponent } from './location-details/location-details.component';
 import { DetailsPageComponent } from './details-page/details-page.component';
 import { RatingStarsComponent } from './rating-stars/rating-stars.component';
+import { MostRecentFirstPipe } from './most-recent-first.pipe';
 
 @NgModule({
   declarations: [
@@ -27,11 +29,14 @@ import { RatingStarsComponent } from './rating-stars/rating-stars.component';
     HtmlLineBreaksPipe,
     LocationDetailsComponent,
     DetailsPageComponent,
-    RatingStarsComponent
+    RatingStarsComponent,
+    MostRecentFirstPipe
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
     RouterModule.forRoot([
     	{
 		path: '',
