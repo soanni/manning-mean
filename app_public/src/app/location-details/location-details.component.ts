@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Location } from '../home-list/home-list.component';
+import { Loc8rDataService } from '../loc8r-data.service';
 
 @Component({
   selector: 'app-location-details',
@@ -27,16 +28,29 @@ export class LocationDetailsComponent implements OnInit {
     }
   }
 
+  private resetAndHideReviewForm(): void {
+    this.formVisible = false;
+    this.newReview.author = '';
+    this.newReview.rating = 5;
+    this.newReview.reviewText = '';
+  }
+
   public onReviewSubmit(): void {
     this.formError = '';
     if (this.formIsValid()) {
     	console.log(this.newReview);
+      this.loc8rDataService.addReviewByLocationId(this.location._id, this.newReview)
+        .then(review => {
+          console.log('Review saved', review);
+          this.location.reviews.unshift(review);
+          this.resetAndHideReviewForm();
+        });
     } else {
 	this.formError = 'All fields required, please try again';
     }
   }
 
-  constructor() { }
+  constructor(private loc8rDataService: Loc8rDataService) { }
 
   ngOnInit() {
   }
