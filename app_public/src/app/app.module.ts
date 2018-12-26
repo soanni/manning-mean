@@ -1,8 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import { AppRoutingModule } from './app-routing/app-routing.module';
 
 import { HomeListComponent } from './home-list/home-list.component';
 import { DistancePipe } from './distance.pipe';
@@ -37,20 +38,7 @@ import { MostRecentFirstPipe } from './most-recent-first.pipe';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule.forRoot([
-    	{
-		path: '',
-		component: HomepageComponent
-	},
-	{
-		path: 'about',
-		component: AboutComponent
-	},
-	{
-		path: 'location/:locationId',
-		component: DetailsPageComponent
-	}
-    ])
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [FrameworkComponent]

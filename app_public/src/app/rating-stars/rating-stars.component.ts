@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Location } from '../home-list/home-list.component';
 
 @Component({
   selector: 'app-rating-stars',
