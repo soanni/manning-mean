@@ -1,5 +1,27 @@
-const mongoose = require('mongoose');
-const Loc = mongoose.model('Location');
+const mongoose = require('mongoose'),
+	Loc = mongoose.model('Location'),
+	User = mongoose.model('User');
+
+const getAuthor = (req, res, callback) => {
+	if (req.payload && req.payload.email) {
+		User.findOne({ email: req.payload.email})
+		    .exec((err, user) => {
+		    	if (!user) {
+				return res.status(404)
+				          .json({"message": "User not found"});
+			} else if (err) {
+				console.log(err);
+				return res.status(404)
+				          .json(err);
+			}
+			    callback(req, res, user.name);
+		    });
+	} else {
+		return res.status(404)
+		          .json({"message": "User not found"})
+	}
+};
+
 
 const doAddReview = (req, res, location) => {
 	if (!location) {
@@ -59,25 +81,27 @@ const updateAverageRating = (locationId) => {
 };
 
 const reviewsCreate = (req, res) => {
-	const locationId = req.params.locationid;
-	if (locationId) {
-		Loc
-		  .findById(locationId)
-		  .select('reviews')
-		  .exec((err, location) => {
-		  	if (err) {
-				res
-				  .status(400)
-				  .json(err);
-			} else {
-				doAddReview(req, res, location);
-			}
-		  });
-	} else {
-		res
-		  .status(404)
-		  .json({"message": "location not found"});
-	}
+	getAuthor(req, res, (req, res, userName) => {
+		const locationId = req.params.locationid;
+		if (locationId) {
+			Loc
+			  .findById(locationId)
+			  .select('reviews')
+			  .exec((err, location) => {
+			  	if (err) {
+					res
+					  .status(400)
+					  .json(err);
+				} else {
+					doAddReview(req, res, location, userName);
+				}
+			  });
+		} else {
+			res
+			  .status(404)
+			  .json({"message": "location not found"});
+		}		
+	});
 };
 
 
