@@ -23,13 +23,13 @@ const getAuthor = (req, res, callback) => {
 };
 
 
-const doAddReview = (req, res, location) => {
+const doAddReview = (req, res, location, author) => {
 	if (!location) {
 		res
 		  .status(404)
 		  .json({"message": "location not found"});
 	} else {
-		const {author, rating, reviewText} = req.body;
+		const {rating, reviewText} = req.body;
 		location.reviews.push({
 			author,
 			rating,
