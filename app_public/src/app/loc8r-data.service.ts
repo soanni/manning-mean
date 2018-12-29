@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Location, Review } from './location';
+import { User } from './user';
+import { Authresponse } from './authresponse';
 
 
 @Injectable({
@@ -43,7 +45,23 @@ export class Loc8rDataService {
 			.then(response => response as Location)
 			.catch(this.handleError)	
 	}
+	
+	public login(user: User): Promise<Authresponse> {
+		return this.makeAuthApiCall('login', user);
+	}
 
+	public register(user: User): Promise<Authresponse> {
+		return this.makeAuthApiCall('register', user);
+	}
+
+	private makeAuthApiCall(urlPath: string, user: User): Promise<Authresponse> {
+		const url: string = `${this.apiBaseUrl}/${urlPath}`;
+		return this.http
+			.post(url, user)
+			.toPromise()
+			.then(response => response as Authresponse)
+			.catch(this.handleError)
+	}
 
 	private handleError(error: any): Promise<any> {
 		console.error('Something has gone wrong', error);
