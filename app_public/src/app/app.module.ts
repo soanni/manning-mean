@@ -17,6 +17,8 @@ import { LocationDetailsComponent } from './location-details/location-details.co
 import { DetailsPageComponent } from './details-page/details-page.component';
 import { RatingStarsComponent } from './rating-stars/rating-stars.component';
 import { MostRecentFirstPipe } from './most-recent-first.pipe';
+import { RegisterComponent } from './register/register.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,9 @@ import { MostRecentFirstPipe } from './most-recent-first.pipe';
     LocationDetailsComponent,
     DetailsPageComponent,
     RatingStarsComponent,
-    MostRecentFirstPipe
+    MostRecentFirstPipe,
+    RegisterComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
