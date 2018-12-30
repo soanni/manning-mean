@@ -12,7 +12,7 @@ export class AuthenticationService {
 	constructor(@Inject(BROWSER_STORAGE) private storage: Storage, private loc8rDataService: Loc8rDataService) { }
 	
 	public getToken(): string {
-		return this.storage.getItem('loca8r-token');
+		return this.storage.getItem('loc8r-token');
 	}
 	
 	public saveToken(token: string): void {

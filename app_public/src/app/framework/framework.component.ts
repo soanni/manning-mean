@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../authentication.service';
+import { HistoryService } from '../history.service';
 import { User } from '../user';
 
 @Component({
@@ -9,7 +10,7 @@ import { User } from '../user';
 })
 export class FrameworkComponent implements OnInit {
 
-  constructor(private authenticationService: AuthenticationService) { }
+  constructor(private authenticationService: AuthenticationService, private historyService: HistoryService) { }
 
   ngOnInit() {
   }
@@ -23,7 +24,7 @@ export class FrameworkComponent implements OnInit {
   }
 
   public getUsername(): string {
-  	const user: User = this.authenticationService.getCurrentUser();
-	return user ? user.name : 'Guest';
+    const user: User = this.authenticationService.getCurrentUser();
+    return user ? user.name : 'Guest';
   }
 }
