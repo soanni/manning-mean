@@ -1,0 +1,10 @@
+project: sre-bootcamp-andrey
+# Docker strategy variables 
+global_labels:
+  com.trilogy.company: "aurea"
+  com.trilogy.team: "central"
+  com.trilogy.product: "{{ project }}"
+  com.trilogy.service: !unsafe "{{ container_id }}"
+  com.trilogy.stage: "{{ stage }}"
+  com.trilogy.maintainer.skype: "live:andrey.solodov_1"
+  com.trilogy.maintainer.email: "andrey.solodov@aurea.com"

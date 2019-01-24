@@ -1,0 +1,156 @@
+#!/usr/bin/env groovy
+@Library(['eng-build-utils']) _
+
+
+pipeline {
+    parameters{
+        string(defaultValue: 'regression', description: '', name: 'ENV_NAME')
+    }
+    environment {
+        EMAIL_TO="andrey.solodov@aurea.com"
+        DOCKER_HOST_IP="10.25.33.74"
+        DOCKER_HOST="tcp://${env.DOCKER_HOST_IP}:2375"
+        NODEJS_IMAGE='registry2.swarm.devfactory.com/aurea/sre-bootcamp-andrey/loc8r'
+    }
+    agent {
+        label "SRE-BOOTCAMP"
+    }
+    options {
+        timestamps()
+    }
+    stages {
+        stage("Install") {
+            steps {
+                sh "whoami"
+                sh "printenv"
+            }
+        }
+        stage("Build Java Docker image") {
+            steps {
+                sh """
+                    docker build --force-rm --no-cache -t ${env.NODEJS_IMAGE}:1.0.${env.BUILD_NUMBER}-SNAPSHOT .
+                """
+            }
+        }  
+        stage("Pushing Java Docker image to registry") {
+            when { expression { return params.DO_BUILD_JAVA == true }}
+            steps {
+                sh """
+                    docker push ${env.NODEJS_IMAGE}:1.0.${env.BUILD_NUMBER}-SNAPSHOT
+                """
+            }
+        }
+        stage("Cleanup") {
+            steps {
+                sh """
+                    if [ ! -d /var/tmp/ansible/sre-bootcamp-andrey-nodejs ]; then mkdir --parents /var/tmp/ansible/sre-bootcamp-andrey-nodejs; fi
+                    rm --recursive --force /var/tmp/ansible/sre-bootcamp-andrey-nodejs/*
+                """
+            }
+        }
+        stage("Generic Ansible checkout") {
+          steps {
+                /*
+                sh """
+                    cp -r /var/tmp/aurea-eng-ansible-generic/* /var/tmp/ansible/sre-bootcamp-andrey-nodejs/
+                """
+                */
+                dir ('/var/tmp/ansible/sre-bootcamp-andrey-nodejs') {
+                    checkout([
+                        $class: 'GitSCM', 
+                        branches: [
+                            [name: 'configuration-management']
+                        ],
+                        doGenerateSubmoduleConfigurations: false, 
+                        extensions: [],
+                        submoduleCfg: [], 
+                        userRemoteConfigs:[
+                            [
+                                credentialsId: 'github-access',
+                                url: 'git@github.com:trilogy-group/aurea-eng-ansible-generic.git'
+                            ]
+                        ]
+                    ])
+                }
+            }
+
+        }  
+        stage("Copying deploy folder to run GA") {
+            steps {
+                sh """
+                    yes | cp --force --recursive ./deploy/* /var/tmp/ansible/sre-bootcamp-andrey-nodejs/
+                """
+            }
+        }
+        stage("Deploying Java container") {
+            when { expression { return params.DO_DEPLOY_JAVA == true }}
+            steps {
+                dir ('/var/tmp/ansible/sre-bootcamp-andrey-nodejs') {
+                    sh """
+                        ansible-vault regression/group_vars/locator.yml --vault-password-file /usr/tmp/ansible_password.txt
+                        ansible-playbook -i ${env.ENV_NAME} \
+                            -e docker_host_address=${env.DOCKER_HOST_IP} \
+                            -e service_group=locator \
+                            -e container_image_tag=1.0.${env.BUILD_NUMBER}-SNAPSHOT \
+                            --tags deploy \
+                            docker.yml \
+                            -vvv
+                    """
+                }
+            }        
+        }    
+        stage("Health") {
+            steps {
+                sh """
+                    #!/usr/bin/bash
+                    set -xe
+                    sleep 100
+                    url=\"http://${env.DOCKER_HOST_IP}:3000\";
+                    echo \$url
+                    max_attempt=100;
+                    start_attempt=0;
+                    sleep_time=3;
+                    healthcheck_ok=false;
+                    while [ \$healthcheck_ok = false ];
+                    do
+                        code=`curl -v --write-out %{http_code} --silent --output /dev/null  --connect-timeout 30 "\${url}"`;
+                        echo "Http code = \$code";
+                        if [ \$code -eq 200 ] || [ \$code -eq 301 ] ;
+                        then
+                            echo 'Healthcheck OK';
+                            healthcheck_ok=true;
+                        else
+                            echo 'Current status code not the expected code retrying...';
+                            start_attempt=\$((start_attempt+1));
+                            if [[ \$start_attempt -eq \$max_attempt ]];
+                            then
+                                echo "Reached max attempts (\$max_attempt)";
+                                exit 1;
+                            fi;
+                            echo 'retrying...';
+                            sleep \$sleep_time;
+                        fi;
+                    done
+                """
+            }
+        }
+    }
+    post {
+        always {
+            // mailing
+            script {
+                comitterEmail = sh (
+                    script: "git rev-parse HEAD | git show --format='%ae' | grep -m1 ''",
+                    returnStdout: true
+                ).trim()
+            }
+
+            
+            step([$class: 'Mailer',
+                recipients: "${comitterEmail}, ${env.EMAIL_TO}",
+                notifyEveryUnstableBuild: true,
+                sendToIndividuals: true
+            ])
+        }
+    }
+}

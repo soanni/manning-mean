@@ -1,0 +1,6 @@
+service_ports:
+  - "3000:3000"
+
+service_networks:
+  - name: locator
+

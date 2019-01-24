@@ -1,0 +1,5 @@
+docker_host_address: 10.25.33.32
+docker:
+  - name: locator
+    services:
+      - locator_1

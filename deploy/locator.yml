@@ -1,0 +1,7 @@
+# Parameters valid for all legacy_rc containers
+container_base_image: registry2.swarm.devfactory.com/aurea/sre-bootcamp-andrey/loc8r
+container_image_tag: 1.0.1-SNAPSHOT
+container_restart_policy: unless-stopped
+container_memory: 1GB
+container_cpu_quota: 1200000
+container_cpu_period: 500000
