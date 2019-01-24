@@ -32,8 +32,7 @@ pipeline {
                 """
             }
         }  
-        stage("Pushing Java Docker image to registry") {
-            when { expression { return params.DO_BUILD_JAVA == true }}
+        stage("Pushing NodeJS Docker image to registry") {
             steps {
                 sh """
                     docker push ${env.NODEJS_IMAGE}:1.0.${env.BUILD_NUMBER}-SNAPSHOT
@@ -82,8 +81,7 @@ pipeline {
                 """
             }
         }
-        stage("Deploying Java container") {
-            when { expression { return params.DO_DEPLOY_JAVA == true }}
+        stage("Deploying NodeJS container") {
             steps {
                 dir ('/var/tmp/ansible/sre-bootcamp-andrey-nodejs') {
                     sh """
