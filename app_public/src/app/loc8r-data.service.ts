@@ -13,7 +13,8 @@ export class Loc8rDataService {
 
 	constructor(private http: HttpClient, @Inject(BROWSER_STORAGE) private storage: Storage) { }
 
-	private apiBaseUrl = 'http://localhost:3000/api';
+	//private apiBaseUrl = 'http://localhost:3000/api';
+	private apiBaseUrl = 'http://10.25.33.74:8090';
 
 	public addReviewByLocationId(locationId: string, formData: Review): Promise<Review> {
 
