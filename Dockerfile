@@ -6,7 +6,8 @@ RUN mkdir -p /usr/src/app
 COPY . /usr/src/app/
 
 WORKDIR /usr/src/app/app_public
-RUN ng build --prod --output-path build
+RUN npm install && \
+	ng build --prod --output-path build
 
 WORKDIR /usr/src/app
 RUN apt-get update -y \
