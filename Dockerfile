@@ -7,6 +7,7 @@ COPY . /usr/src/app/
 
 WORKDIR /usr/src/app/app_public
 RUN npm install && \
+	npm i -g @angular/cli && \
 	ng build --prod --output-path build
 
 WORKDIR /usr/src/app
