@@ -1,5 +1,5 @@
 service_ports:
-  - "3000:3000"
+  - "8090:3000"
 
 service_networks:
   - name: locator

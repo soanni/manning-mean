@@ -10,4 +10,4 @@ RUN apt-get update -y \
     && npm install --unsafe-perm
 
 EXPOSE 3000
-CMD npm run docker
+CMD npm start

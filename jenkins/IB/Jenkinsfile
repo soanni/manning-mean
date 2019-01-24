@@ -103,7 +103,7 @@ pipeline {
                     #!/usr/bin/bash
                     set -xe
                     sleep 100
-                    url=\"http://${env.DOCKER_HOST_IP}:3000\";
+                    url=\"http://${env.DOCKER_HOST_IP}:8090\";
                     echo \$url
                     max_attempt=100;
                     start_attempt=0;
