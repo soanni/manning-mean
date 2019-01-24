@@ -25,7 +25,7 @@ pipeline {
                 sh "printenv"
             }
         }
-        stage("Build Java Docker image") {
+        stage("Build NodeJS Docker image") {
             steps {
                 sh """
                     docker build --force-rm --no-cache -t ${env.NODEJS_IMAGE}:1.0.${env.BUILD_NUMBER}-SNAPSHOT .
@@ -85,7 +85,7 @@ pipeline {
             steps {
                 dir ('/var/tmp/ansible/sre-bootcamp-andrey-nodejs') {
                     sh """
-                        ansible-vault regression/group_vars/locator.yml --vault-password-file /usr/tmp/ansible_password.txt
+                        ansible-vault decrypt regression/group_vars/locator.yml --vault-password-file /usr/tmp/ansible_password.txt
                         ansible-playbook -i ${env.ENV_NAME} \
                             -e docker_host_address=${env.DOCKER_HOST_IP} \
                             -e service_group=locator \
