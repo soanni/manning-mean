@@ -1,6 +1,7 @@
 FROM node:8.15.0
 
-ENV PORT="3000"
+ENV PORT="3000" \
+	ELASTIC_APM_SERVER_URL=http://localhost:8200
 
 RUN mkdir -p /usr/src/app
 COPY . /usr/src/app/
@@ -13,7 +14,8 @@ RUN npm install && \
 WORKDIR /usr/src/app
 RUN apt-get update -y \
     && apt-get -y install curl python build-essential git ca-certificates \
-    && npm install --unsafe-perm
+    && npm install --unsafe-perm \
+    && npm install elastic-apm-node --save
 
 EXPOSE 3000
 CMD npm start

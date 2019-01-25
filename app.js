@@ -1,3 +1,4 @@
+const apm = require('elastic-apm-node').start();
 const createError = require('http-errors'),
 	express = require('express'),
 	path = require('path'),
