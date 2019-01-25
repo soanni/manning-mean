@@ -1,4 +1,6 @@
-const apm = require('elastic-apm-node').start();
+const apm = require('elastic-apm-node').start({
+	serverUrl: 'http://10.25.33.74:8200'
+});
 const createError = require('http-errors'),
 	express = require('express'),
 	path = require('path'),

@@ -1,10 +1,6 @@
 service_ports:
   - "8090:3000"
 
-service_env_variables:
-  ELASTIC_APM_SERVER_URL: http://10.25.33.74:8200
-  ELASTIC_APM_LOG_LEVEL: trace
-
 service_networks:
   - name: locator
 

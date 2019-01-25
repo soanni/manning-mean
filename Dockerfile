@@ -1,7 +1,6 @@
 FROM node:8.15.0
 
-ENV PORT="3000" \
-	ELASTIC_APM_SERVER_URL=http://localhost:8200
+ENV PORT="3000"
 
 RUN mkdir -p /usr/src/app
 COPY . /usr/src/app/
