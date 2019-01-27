@@ -8,23 +8,26 @@ import { BROWSER_STORAGE } from './storage';
 
 import { init as initApm } from 'elastic-apm-js-base';
 
-var apm = initApm({
-  serviceName: 'loc8r-angular',
-  serverUrl: 'http://10.25.33.74:8200'
-});
-
 @Injectable({
   providedIn: 'root'
 })
 export class Loc8rDataService {
 
-	constructor(private http: HttpClient, @Inject(BROWSER_STORAGE) private storage: Storage) { }
+	constructor(private http: HttpClient, @Inject(BROWSER_STORAGE) private storage: Storage) { 
+		this.apm = initApm({
+		  serviceName: 'loc8r-angular',
+		  serverUrl: 'http://10.25.33.74:8200'
+		});
+		this.transaction = apm.startTransaction('loc8r-data.service', 'custom');
+	}
+
+	// Elastic APM RUM
+	private apm;
+	private transaction;
+	private httpSpan;
 
 	//private apiBaseUrl = 'http://localhost:3000/api';
 	private apiBaseUrl = 'http://10.25.33.74:8090/api';
-
-	private transaction;
-	private httpSpan;
 
 	public addReviewByLocationId(locationId: string, formData: Review): Promise<Review> {
 		const url: string = `${this.apiBaseUrl}/locations/${locationId}/reviews`;
@@ -32,8 +35,7 @@ export class Loc8rDataService {
 			headers: new HttpHeaders({'Authorization': `Bearer ${this.storage.getItem('loc8r-token')}`})
 		};
 
-		this.transaction = apm.startTransaction('loc8r-data.service', 'custom');
-		this.httpSpan = this.transaction.startSpan('POST ' + url, 'http');
+		this.httpSpan = this.transaction.startSpan('Custom POST ' + url, 'http');
 
 		return this.http
 			.post(url, formData, httpOptions)
@@ -52,8 +54,7 @@ export class Loc8rDataService {
 		const maxDistance: number = 20;
 		const url: string = `${this.apiBaseUrl}/locations?lng=${lng}&lat=${lat}&maxDistance=${maxDistance}`;
 
-		this.transaction = apm.startTransaction('loc8r-data.service', 'custom');
-		this.httpSpan = this.transaction.startSpan('GET ' + url, 'http');
+		this.httpSpan = this.transaction.startSpan('Custom GET ' + url, 'http');
 
 		return this.http
 			.get(url)
@@ -69,8 +70,7 @@ export class Loc8rDataService {
 	public getLocationById(locationId: string): Promise<Location> {
 		const url: string = `${this.apiBaseUrl}/locations/${locationId}`;
 
-		this.transaction = apm.startTransaction('loc8r-data.service', 'custom');
-		this.httpSpan = this.transaction.startSpan('GET ' + url, 'http');
+		this.httpSpan = this.transaction.startSpan('Custom GET ' + url, 'http');
 
 		return this.http
 			.get(url)
@@ -94,8 +94,7 @@ export class Loc8rDataService {
 	private makeAuthApiCall(urlPath: string, user: User): Promise<Authresponse> {
 		const url: string = `${this.apiBaseUrl}/${urlPath}`;
 
-		this.transaction = apm.startTransaction('loc8r-data.service', 'custom');
-		this.httpSpan = this.transaction.startSpan('POST ' + url, 'http');		
+		this.httpSpan = this.transaction.startSpan('Custom POST ' + url, 'http');		
 
 		return this.http
 			.post(url, user)
@@ -109,7 +108,7 @@ export class Loc8rDataService {
 	}
 
 	private handleError(error: any): Promise<any> {
-		apm.captureError(new Error(`POST/GET failed with status ${error.message}`));
+		apm.captureError(new Error(`Custom POST/GET failed with status ${error.message}`));
 		this.httpSpan.end();
     	this.transaction.end();
 
