@@ -108,7 +108,7 @@ export class Loc8rDataService {
 	}
 
 	private handleError(error: any): Promise<any> {
-		apm.captureError(new Error(`Custom POST/GET failed with status ${error.message}`));
+		this.apm.captureError(new Error(`Custom POST/GET failed with status ${error.message}`));
 		this.httpSpan.end();
     	this.transaction.end();
 
