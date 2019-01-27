@@ -5,6 +5,15 @@ import { switchMap } from 'rxjs/operators';
 import { Loc8rDataService } from '../loc8r-data.service';
 import { Location } from '../location';
 
+import { init as initApm } from 'elastic-apm-js-base';
+
+var apm = initApm({
+  serviceName: 'loc8r-angular',
+  serverUrl: 'http://10.25.33.74:8200',
+  logLevel: 'trace'
+});
+
+
 @Component({
   selector: 'app-details-page',
   templateUrl: './details-page.component.html',
@@ -17,6 +26,9 @@ export class DetailsPageComponent implements OnInit {
   newLocation: Location;
 
   ngOnInit(): void {
+  	var transaction = apm.startTransaction('details-page.component', 'custom');
+	var httpSpan = transaction.startSpan('... getLocationById ...', 'http');
+
   	this.route.paramMap
 		.pipe(
 			switchMap((params: ParamMap) => {
@@ -30,6 +42,8 @@ export class DetailsPageComponent implements OnInit {
 			this.pageContent.sidebar = `${newLocation.name} is on Loc8r because it has accessible wifi and space to sit down with your laptop and get some work done.\n\nIf you\'ve been and you like it - or if you don\'t - please leave a review to help other people just like you`;
 		});
 
+	httpSpan.end();
+	transaction.end();
   }
   
   public pageContent = {

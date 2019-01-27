@@ -3,14 +3,6 @@ import { AuthenticationService } from '../authentication.service';
 import { HistoryService } from '../history.service';
 import { User } from '../user';
 
-//import { init as initApm } from 'elastic-apm-js-base';
-
-//var apm = initApm({
-//  serviceName: 'loc8r-angular',
-//  serverUrl: 'http://10.25.33.74:8200',
-//  logLevel: 'trace'
-//});
-
 @Component({
   selector: 'app-framework',
   templateUrl: './framework.component.html',
