@@ -46,7 +46,15 @@ export class Loc8rDataService {
     			this.transaction.end();
 				return response as Review;
 			})
-			.catch(this.handleError.bind(this));
+			//.catch(this.handleError.bind(this))
+			.catch(	(error) => {
+				this.apm.captureError(new Error(`Custom POST/GET failed with status ${error.message}`));
+				this.httpSpan.end();
+		    	this.transaction.end();
+
+				console.error('Something has gone wrong', error);
+				return Promise.reject(error.message || error);			
+			});
 	}
 
 	public getLocations(lat: number, lng: number): Promise<Location[]> {
@@ -65,7 +73,15 @@ export class Loc8rDataService {
     			this.transaction.end();
 				return response as Location[]
 			})
-			.catch(this.handleError.bind(this));
+			//.catch(this.handleError.bind(this))
+			.catch(	(error) => {
+				this.apm.captureError(new Error(`Custom POST/GET failed with status ${error.message}`));
+				this.httpSpan.end();
+		    	this.transaction.end();
+
+				console.error('Something has gone wrong', error);
+				return Promise.reject(error.message || error);			
+			});
 	}
 	
 	public getLocationById(locationId: string): Promise<Location> {
@@ -81,7 +97,15 @@ export class Loc8rDataService {
     			this.transaction.end();				
 				return response as Location;
 			})
-			.catch(this.handleError.bind(this))	
+			//.catch(this.handleError.bind(this))
+			.catch(	(error) => {
+				this.apm.captureError(new Error(`Custom POST/GET failed with status ${error.message}`));
+				this.httpSpan.end();
+		    	this.transaction.end();
+
+				console.error('Something has gone wrong', error);
+				return Promise.reject(error.message || error);			
+			});	
 	}
 	
 	public login(user: User): Promise<Authresponse> {
@@ -105,16 +129,24 @@ export class Loc8rDataService {
     			this.transaction.end();
 				return response as Authresponse;
 			})
-			.catch(this.handleError.bind(this))
+			//.catch(this.handleError.bind(this))
+			.catch(	(error) => {
+				this.apm.captureError(new Error(`Custom POST/GET failed with status ${error.message}`));
+				this.httpSpan.end();
+		    	this.transaction.end();
+
+				console.error('Something has gone wrong', error);
+				return Promise.reject(error.message || error);			
+			});
 	}
 
-	private handleError(error: any): Promise<any> {
-		this.apm.captureError(new Error(`Custom POST/GET failed with status ${error.message}`));
-		this.httpSpan.end();
-    	this.transaction.end();
-
-		console.error('Something has gone wrong', error);
-		return Promise.reject(error.message || error);	
-	}
+//	private handleError(error: any): Promise<any> {
+//		this.apm.captureError(new Error(`Custom POST/GET failed with status ${error.message}`));
+//		this.httpSpan.end();
+//    	this.transaction.end();
+//
+//		console.error('Something has gone wrong', error);
+//		return Promise.reject(error.message || error);	
+//	}
 
 }
