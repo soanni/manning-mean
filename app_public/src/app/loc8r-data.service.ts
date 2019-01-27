@@ -23,21 +23,24 @@ export class Loc8rDataService {
 	//private apiBaseUrl = 'http://localhost:3000/api';
 	private apiBaseUrl = 'http://10.25.33.74:8090/api';
 
+	private transaction;
+	private httpSpan;
+
 	public addReviewByLocationId(locationId: string, formData: Review): Promise<Review> {
 		const url: string = `${this.apiBaseUrl}/locations/${locationId}/reviews`;
 		const httpOptions = {
 			headers: new HttpHeaders({'Authorization': `Bearer ${this.storage.getItem('loc8r-token')}`})
 		};
 
-		var transaction = apm.startTransaction('loc8r-data.service', 'custom');
-		var httpSpan = transaction.startSpan('POST ' + url, 'http');
+		this.transaction = apm.startTransaction('loc8r-data.service', 'custom');
+		this.httpSpan = transaction.startSpan('POST ' + url, 'http');
 
 		return this.http
 			.post(url, formData, httpOptions)
 			.toPromise()
 			.then((response) => {
-				httpSpan.end();
-    			transaction.end();
+				this.httpSpan.end();
+    			this.transaction.end();
 				return response as Review;
 			})
 			.catch(this.handleError);
@@ -49,15 +52,15 @@ export class Loc8rDataService {
 		const maxDistance: number = 20;
 		const url: string = `${this.apiBaseUrl}/locations?lng=${lng}&lat=${lat}&maxDistance=${maxDistance}`;
 
-		var transaction = apm.startTransaction('loc8r-data.service', 'custom');
-		var httpSpan = transaction.startSpan('GET ' + url, 'http');
+		this.transaction = apm.startTransaction('loc8r-data.service', 'custom');
+		this.httpSpan = transaction.startSpan('GET ' + url, 'http');
 
 		return this.http
 			.get(url)
 			.toPromise()
 			.then((response) => {
-				httpSpan.end();
-    			transaction.end();
+				this.httpSpan.end();
+    			this.transaction.end();
 				return response as Location[]
 			})
 			.catch(this.handleError);
@@ -66,15 +69,15 @@ export class Loc8rDataService {
 	public getLocationById(locationId: string): Promise<Location> {
 		const url: string = `${this.apiBaseUrl}/locations/${locationId}`;
 
-		var transaction = apm.startTransaction('loc8r-data.service', 'custom');
-		var httpSpan = transaction.startSpan('GET ' + url, 'http');
+		this.transaction = apm.startTransaction('loc8r-data.service', 'custom');
+		this.httpSpan = transaction.startSpan('GET ' + url, 'http');
 
 		return this.http
 			.get(url)
 			.toPromise()
 			.then((response) => {
-				httpSpan.end();
-    			transaction.end();				
+				this.httpSpan.end();
+    			this.transaction.end();				
 				response as Location;
 			})
 			.catch(this.handleError)	
@@ -91,15 +94,15 @@ export class Loc8rDataService {
 	private makeAuthApiCall(urlPath: string, user: User): Promise<Authresponse> {
 		const url: string = `${this.apiBaseUrl}/${urlPath}`;
 
-		var transaction = apm.startTransaction('loc8r-data.service', 'custom');
-		var httpSpan = transaction.startSpan('POST ' + url, 'http');		
+		this.transaction = apm.startTransaction('loc8r-data.service', 'custom');
+		this.httpSpan = transaction.startSpan('POST ' + url, 'http');		
 
 		return this.http
 			.post(url, user)
 			.toPromise()
 			.then((response) => {
-				httpSpan.end();
-    			transaction.end();
+				this.httpSpan.end();
+    			this.transaction.end();
 				return response as Authresponse;
 			})
 			.catch(this.handleError)
@@ -107,8 +110,8 @@ export class Loc8rDataService {
 
 	private handleError(error: any): Promise<any> {
 		apm.captureError(new Error(`POST/GET failed with status ${error.message}`));
-		httpSpan.end();
-    	transaction.end();
+		this.httpSpan.end();
+    	this.transaction.end();
 
 		console.error('Something has gone wrong', error);
 		return Promise.reject(error.message || error);	
