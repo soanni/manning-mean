@@ -6,7 +6,8 @@ import { User } from '../user';
 
 var apm = initApm({
   serviceName: 'loc8r-angular',
-  serverUrl: 'http://10.25.33.74:8200'
+  serverUrl: 'http://10.25.33.74:8200',
+  logLevel: 'trace'
 });
 
 @Component({
