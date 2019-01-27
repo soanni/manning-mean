@@ -1,6 +1,7 @@
 FROM node:8.15.0
 
-ENV PORT="3000"
+ENV PORT="3000" \
+	NR_LICENSE_KEY="mykey"
 
 RUN mkdir -p /usr/src/app
 COPY . /usr/src/app/
@@ -8,14 +9,12 @@ COPY . /usr/src/app/
 WORKDIR /usr/src/app/app_public
 RUN npm install && \
 	npm i -g @angular/cli && \
-	npm install elastic-apm-js-base --save && \
 	ng build --prod --output-path build
 
 WORKDIR /usr/src/app
 RUN apt-get update -y \
     && apt-get -y install curl python build-essential git ca-certificates \
-    && npm install --unsafe-perm \
-    && npm install elastic-apm-node --save
+    && npm install --unsafe-perm
 
 EXPOSE 3000
 CMD npm start
