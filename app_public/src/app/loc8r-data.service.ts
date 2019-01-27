@@ -14,16 +14,17 @@ import { init as initApm } from 'elastic-apm-js-base';
 export class Loc8rDataService {
 
 	constructor(private http: HttpClient, @Inject(BROWSER_STORAGE) private storage: Storage) { 
-		this.apm = initApm({
-		  serviceName: 'loc8r-angular-custom',
-		  serverUrl: 'http://10.25.33.74:8200',
-		  logLevel: 'trace'
-		});
-		this.transaction = this.apm.startTransaction('loc8r-data.service', 'custom');
+//		this.apm = initApm({
+//		  serviceName: 'loc8r-angular-custom',
+//		  serverUrl: 'http://10.25.33.74:8200',
+//		  logLevel: 'trace'
+//		});
+//		this.transaction = this.apm.startTransaction('loc8r-data.service', 'custom');
+		this.transaction = apm.startTransaction('loc8r-data.service', 'custom');
 	}
 
 	// Elastic APM RUM
-	private apm;
+//	private apm;
 	private transaction;
 	private httpSpan;
 
@@ -48,7 +49,8 @@ export class Loc8rDataService {
 			})
 			//.catch(this.handleError.bind(this))
 			.catch(	(error) => {
-				this.apm.captureError(new Error(`Custom POST/GET failed with status ${error.message}`));
+//				this.apm.captureError(new Error(`Custom POST/GET failed with status ${error.message}`));
+				apm.captureError(new Error(`Custom POST/GET failed with status ${error.message}`));
 				this.httpSpan.end();
 		    	this.transaction.end();
 
@@ -75,7 +77,8 @@ export class Loc8rDataService {
 			})
 			//.catch(this.handleError.bind(this))
 			.catch(	(error) => {
-				this.apm.captureError(new Error(`Custom POST/GET failed with status ${error.message}`));
+//				this.apm.captureError(new Error(`Custom POST/GET failed with status ${error.message}`));
+				apm.captureError(new Error(`Custom POST/GET failed with status ${error.message}`));
 				this.httpSpan.end();
 		    	this.transaction.end();
 
@@ -99,7 +102,8 @@ export class Loc8rDataService {
 			})
 			//.catch(this.handleError.bind(this))
 			.catch(	(error) => {
-				this.apm.captureError(new Error(`Custom POST/GET failed with status ${error.message}`));
+//				this.apm.captureError(new Error(`Custom POST/GET failed with status ${error.message}`));
+				apm.captureError(new Error(`Custom POST/GET failed with status ${error.message}`));
 				this.httpSpan.end();
 		    	this.transaction.end();
 
@@ -131,7 +135,8 @@ export class Loc8rDataService {
 			})
 			//.catch(this.handleError.bind(this))
 			.catch(	(error) => {
-				this.apm.captureError(new Error(`Custom POST/GET failed with status ${error.message}`));
+//				this.apm.captureError(new Error(`Custom POST/GET failed with status ${error.message}`));
+				apm.captureError(new Error(`Custom POST/GET failed with status ${error.message}`));
 				this.httpSpan.end();
 		    	this.transaction.end();
 
