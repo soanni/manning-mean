@@ -46,7 +46,7 @@ export class Loc8rDataService {
     			this.transaction.end();
 				return response as Review;
 			})
-			.catch(this.handleError);
+			.catch(this.handleError.bind(this));
 	}
 
 	public getLocations(lat: number, lng: number): Promise<Location[]> {
@@ -65,7 +65,7 @@ export class Loc8rDataService {
     			this.transaction.end();
 				return response as Location[]
 			})
-			.catch(this.handleError);
+			.catch(this.handleError.bind(this));
 	}
 	
 	public getLocationById(locationId: string): Promise<Location> {
@@ -81,7 +81,7 @@ export class Loc8rDataService {
     			this.transaction.end();				
 				return response as Location;
 			})
-			.catch(this.handleError)	
+			.catch(this.handleError.bind(this))	
 	}
 	
 	public login(user: User): Promise<Authresponse> {
@@ -105,7 +105,7 @@ export class Loc8rDataService {
     			this.transaction.end();
 				return response as Authresponse;
 			})
-			.catch(this.handleError)
+			.catch(this.handleError.bind(this))
 	}
 
 	private handleError(error: any): Promise<any> {
