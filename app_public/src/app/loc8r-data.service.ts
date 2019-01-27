@@ -13,7 +13,7 @@ import { BROWSER_STORAGE } from './storage';
 })
 export class Loc8rDataService {
 
-//	constructor(private http: HttpClient, @Inject(BROWSER_STORAGE) private storage: Storage) { 
+	constructor(private http: HttpClient, @Inject(BROWSER_STORAGE) private storage: Storage) { 
 //		this.apm = initApm({
 //		  serviceName: 'loc8r-angular-custom',
 //		  serverUrl: 'http://10.25.33.74:8200',
@@ -112,7 +112,7 @@ export class Loc8rDataService {
 //		this.apm.captureError(new Error(`Custom POST/GET failed with status ${error.message}`));
 //		this.httpSpan.end();
 //    	this.transaction.end();
-
+//
 		console.error('Something has gone wrong', error);
 		return Promise.reject(error.message || error);	
 	}
