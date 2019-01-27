@@ -18,7 +18,7 @@ export class Loc8rDataService {
 		  serviceName: 'loc8r-angular',
 		  serverUrl: 'http://10.25.33.74:8200'
 		});
-		this.transaction = apm.startTransaction('loc8r-data.service', 'custom');
+		this.transaction = this.this.apm.startTransaction('loc8r-data.service', 'custom');
 	}
 
 	// Elastic APM RUM
@@ -108,7 +108,7 @@ export class Loc8rDataService {
 	}
 
 	private handleError(error: any): Promise<any> {
-		apm.captureError(new Error(`Custom POST/GET failed with status ${error.message}`));
+		this.apm.captureError(new Error(`Custom POST/GET failed with status ${error.message}`));
 		this.httpSpan.end();
     	this.transaction.end();
 
