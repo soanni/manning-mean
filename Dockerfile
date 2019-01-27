@@ -8,6 +8,7 @@ COPY . /usr/src/app/
 WORKDIR /usr/src/app/app_public
 RUN npm install && \
 	npm i -g @angular/cli && \
+	npm install elastic-apm-js-base --save && \
 	ng build --prod --output-path build
 
 WORKDIR /usr/src/app

@@ -1,7 +1,13 @@
+import { init as initApm } from 'elastic-apm-js-base';
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../authentication.service';
 import { HistoryService } from '../history.service';
 import { User } from '../user';
+
+var apm = initApm({
+  serviceName: 'loc8r-angular',
+  serverUrl: 'http://10.25.33.74:8200'
+});
 
 @Component({
   selector: 'app-framework',
