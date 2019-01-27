@@ -20,14 +20,6 @@ import { MostRecentFirstPipe } from './most-recent-first.pipe';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 
-import { init as initApm } from 'elastic-apm-js-base';
-
-var apm = initApm({
-  serviceName: 'loc8r-angular',
-  serverUrl: 'http://10.25.33.74:8200',
-  logLevel: 'trace'
-});
-
 @NgModule({
   declarations: [
     HomeListComponent,
