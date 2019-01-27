@@ -33,7 +33,7 @@ export class Loc8rDataService {
 		};
 
 		this.transaction = apm.startTransaction('loc8r-data.service', 'custom');
-		this.httpSpan = transaction.startSpan('POST ' + url, 'http');
+		this.httpSpan = this.transaction.startSpan('POST ' + url, 'http');
 
 		return this.http
 			.post(url, formData, httpOptions)
@@ -53,7 +53,7 @@ export class Loc8rDataService {
 		const url: string = `${this.apiBaseUrl}/locations?lng=${lng}&lat=${lat}&maxDistance=${maxDistance}`;
 
 		this.transaction = apm.startTransaction('loc8r-data.service', 'custom');
-		this.httpSpan = transaction.startSpan('GET ' + url, 'http');
+		this.httpSpan = this.transaction.startSpan('GET ' + url, 'http');
 
 		return this.http
 			.get(url)
@@ -70,7 +70,7 @@ export class Loc8rDataService {
 		const url: string = `${this.apiBaseUrl}/locations/${locationId}`;
 
 		this.transaction = apm.startTransaction('loc8r-data.service', 'custom');
-		this.httpSpan = transaction.startSpan('GET ' + url, 'http');
+		this.httpSpan = this.transaction.startSpan('GET ' + url, 'http');
 
 		return this.http
 			.get(url)
@@ -95,7 +95,7 @@ export class Loc8rDataService {
 		const url: string = `${this.apiBaseUrl}/${urlPath}`;
 
 		this.transaction = apm.startTransaction('loc8r-data.service', 'custom');
-		this.httpSpan = transaction.startSpan('POST ' + url, 'http');		
+		this.httpSpan = this.transaction.startSpan('POST ' + url, 'http');		
 
 		return this.http
 			.post(url, user)
