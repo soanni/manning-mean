@@ -1,10 +1,5 @@
 require('newrelic');
-const apm = require('elastic-apm-node').start({
-	serviceName: 'loc8r',
-	serverUrl: 'http://10.25.33.74:8200',
-	logLevel: 'trace',
-	captureBody: 'all'
-});
+const apm = require('elastic-apm-node').start({});
 const createError = require('http-errors'),
 	express = require('express'),
 	path = require('path'),
